@@ -1004,7 +1004,7 @@
             from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
         import {
             getFirestore, doc, collection, query, where, orderBy, limit,
-            onSnapshot, setDoc, getDocs, serverTimestamp, Timestamp, enableIndexedDbPersistence
+            onSnapshot, setDoc, getDocs, deleteDoc, serverTimestamp, Timestamp, enableIndexedDbPersistence
         }
             from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
@@ -1308,6 +1308,13 @@
                             linkedFrom: emailSnap.empty ? null : emailSnap.docs[0].id,
                             createdAt: serverTimestamp()
                         }, { merge: true });
+
+                        // CRITICAL: Clean up legacy duplicate if it exists and is different from the new ID
+                        if (!emailSnap.empty && emailSnap.docs[0].id !== user.uid) {
+                            const legacyDocId = emailSnap.docs[0].id;
+                            console.warn("[Migration] Deleting legacy profile document:", legacyDocId);
+                            await deleteDoc(doc(db, "students", legacyDocId));
+                        }
                     } catch (e) {
                          console.error("Link/Create error:", e);
                     }
