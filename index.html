@@ -1491,6 +1491,63 @@
             refreshHistoryListener(ids);
         }
 
+        /* ── Real-time Notification Logic ── */
+        window._notifiedLogs = new Set();
+        
+        function updateUnreadCount() {
+            const headerSub = document.querySelector("#notif-panel .notif-header p:last-child");
+            const dots = document.querySelectorAll(".notif-dot");
+            if (headerSub) {
+                if (dots.length > 0) {
+                    headerSub.textContent = `${dots.length} unread message${dots.length > 1 ? 's' : ''}`;
+                } else {
+                    headerSub.textContent = "All caught up!";
+                }
+            }
+        }
+
+        function addRealtimeNotification(log) {
+            const notifList = document.querySelector('.notif-list');
+            const notifBadge = document.getElementById('notif-badge');
+            
+            if (!notifList) return;
+
+            const isEntry = log.type === "entry";
+            const icon = isEntry ? "login" : (log.type === "exit" || log.type === "outside" ? "logout" : "info");
+            const colorClass = isEntry ? "bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400" : (log.type === "denied" ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400" : "bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400");
+            const title = isEntry ? "Campus Entry Confirmed" : (log.type === "denied" ? "Access Attempt Blocked" : "Campus Exit Recorded");
+            const desc = isEntry ? `Your QR scan at ${log.gate || 'Main Gate'} was successful.` : (log.type === "denied" ? `Unrecognized scan at ${log.gate || 'Main Gate'}.` : `You exited via ${log.gate || 'Main Gate'}.`);
+            
+            const timeStr = "Just now";
+
+            const notifItem = document.createElement("div");
+            notifItem.className = "notif-item animate-in slide-in-from-top-2 duration-300";
+            notifItem.onclick = () => {
+                const dot = notifItem.querySelector('.notif-dot');
+                if (dot) dot.remove();
+                updateUnreadCount();
+                navTo('history');
+                closeNotifPanel();
+            };
+            
+            notifItem.innerHTML = `
+                <div class="notif-icon ${colorClass}">
+                    <span class="material-symbols-outlined" style="font-size:20px">${icon}</span>
+                </div>
+                <div class="flex-1">
+                    <p class="text-[#100d1b] dark:text-white text-[13px] font-semibold leading-snug">${title}</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-[11px] mt-0.5 leading-relaxed">${desc}</p>
+                    <p class="text-primary dark:text-primary/70 text-[10px] font-bold mt-1">${timeStr}</p>
+                </div>
+                <div class="notif-dot"></div>
+            `;
+
+            notifList.prepend(notifItem);
+
+            if (notifBadge) notifBadge.style.display = "flex";
+            updateUnreadCount();
+        }
+
         function refreshHistoryListener(idList = []) {
             const user = auth.currentUser;
             if (!user) return;
@@ -1519,8 +1576,25 @@
                 where("uid", "in", searchIds)
             );
 
+            let isInitialLoad = true;
             unsubLogs = onSnapshot(logsQuery, snap => {
                 let logs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                // Handle new incoming notifications
+                if (!isInitialLoad) {
+                    snap.docChanges().forEach(change => {
+                        if (change.type === "added") {
+                            const newLog = { id: change.doc.id, ...change.doc.data() };
+                            
+                            // Prevent duplicate notifications
+                            if (!window._notifiedLogs?.has(newLog.id)) {
+                                window._notifiedLogs.add(newLog.id);
+                                addRealtimeNotification(newLog);
+                            }
+                        }
+                    });
+                }
+                isInitialLoad = false;
                 
                 // Perform filtering and sorting (Mimics how the Admin table works automatically)
                 logs = logs.filter(log => {
