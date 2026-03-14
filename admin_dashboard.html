@@ -515,11 +515,7 @@
           campus access events and student movement.</p>
       </div>
       <div class="flex gap-3">
-        <button onclick="exportLogsCSV()"
-          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal tracking-[0.015em] border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors">
-          <span class="material-symbols-outlined mr-2 text-[18px]">download</span>
-          <span class="truncate">Export CSV</span>
-        </button>
+
       </div>
     </div>
     <div
@@ -1661,46 +1657,6 @@
       return { entries: entriesData, exits: exitsData };
     }
 
-    // ── Export Logs to CSV ──
-    window.exportLogsCSV = () => {
-      if (!currentLogs || currentLogs.length === 0) {
-        alert("No logs available to export.");
-        return;
-      }
-      
-      const headers = ["Timestamp", "Student Name", "UID", "Event Type", "Gate", "Result"];
-      const rows = currentLogs.map(log => {
-        let tsString = "";
-        try {
-          const date = (log.timestamp && log.timestamp.toDate) 
-              ? log.timestamp.toDate() 
-              : (log.timestamp ? new Date(log.timestamp) : new Date());
-          tsString = date.toLocaleString();
-        } catch (e) {
-          tsString = "Unknown";
-        }
-        
-        return [
-          `"${tsString}"`,
-          `"${log.studentName || 'Unknown'}"`,
-          `"${log.uid || 'N/A'}"`,
-          `"${(log.type || 'unknown').toUpperCase()}"`,
-          `"${log.gate || 'N/A'}"`,
-          `"${log.result || 'success'}"`
-        ].join(",");
-      });
-
-      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
-      const encodedUri = encodeURI(csvContent);
-      
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `access_logs_${new Date().getTime()}.csv`);
-      document.body.appendChild(link);
-      
-      link.click();
-      document.body.removeChild(link);
-    };
 
     // ── QR Scanner Logic ──────────────────────────────────────────────────
     let html5QrCode;
