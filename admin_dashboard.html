@@ -285,7 +285,7 @@
         <div class="size-9 rounded-full bg-slate-200 flex items-center justify-center border-2 border-white shadow-sm">
           <span class="material-symbols-outlined text-sm text-slate-500">person</span>
         </div>
-        <a href="#" onclick="handleAdminLogout(event)"
+        <a href="index.html"
           class="flex items-center justify-center size-9 rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-colors border border-red-200 ml-1"
           title="Logout">
           <span class="material-symbols-outlined text-sm">logout</span>
@@ -515,7 +515,11 @@
           campus access events and student movement.</p>
       </div>
       <div class="flex gap-3">
-
+        <button
+          class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal tracking-[0.015em] border border-slate-200 dark:border-slate-700 hover:bg-slate-200 transition-colors">
+          <span class="material-symbols-outlined mr-2 text-[18px]">download</span>
+          <span class="truncate">Export CSV</span>
+        </button>
       </div>
     </div>
     <div
@@ -1652,11 +1656,9 @@
             else if (log.type === "exit") exitsData[idx]++;
           }
         }
-        }
       });
       return { entries: entriesData, exits: exitsData };
     }
-
 
     // ── QR Scanner Logic ──────────────────────────────────────────────────
     let html5QrCode;
@@ -2018,12 +2020,6 @@
           card.offsetHeight; // reflow
           card.style.animation = 'shake 0.4s ease';
         }
-      };
-
-      window.handleAdminLogout = function (e) {
-        if (e) e.preventDefault();
-        sessionStorage.removeItem(SESSION_KEY);
-        window.location.reload();
       };
 
       // Inject shake keyframe once
