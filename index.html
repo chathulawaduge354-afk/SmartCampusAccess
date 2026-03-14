@@ -318,88 +318,7 @@
             background: rgba(99, 102, 241, 0.1) !important;
         }
 
-        /* ── Notification Panel ── */
-        #notif-panel {
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            width: 320px;
-            max-height: 420px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(50,17,212,0.08);
-            border: 1px solid rgba(0,0,0,0.06);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            z-index: 500;
-            transform: translateY(-8px) scale(0.97);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;
-        }
-        .dark #notif-panel {
-            background: #1e1b33;
-            border-color: rgba(255,255,255,0.07);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 4px 16px rgba(50,17,212,0.15);
-        }
-        #notif-panel.notif-open {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .notif-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 18px 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .dark .notif-header {
-            border-bottom-color: rgba(255,255,255,0.06);
-        }
-        .notif-list {
-            overflow-y: auto;
-            flex: 1;
-        }
-        .notif-list::-webkit-scrollbar { display: none; }
-        .notif-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 18px;
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-            transition: background 0.15s;
-            cursor: pointer;
-        }
-        .dark .notif-item { border-bottom-color: rgba(255,255,255,0.04); }
-        .notif-item:hover { background: rgba(50,17,212,0.04); }
-        .dark .notif-item:hover { background: rgba(255,255,255,0.04); }
-        .notif-item:last-child { border-bottom: none; }
-        .notif-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 18px;
-        }
-        .notif-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #3211d4;
-            flex-shrink: 0;
-            margin-top: 6px;
-        }
-        .notif-footer {
-            padding: 12px 18px;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .dark .notif-footer { border-top-color: rgba(255,255,255,0.06); }
+
     </style>
 </head>
 
@@ -569,78 +488,7 @@
                                 class="text-[#100d1b] dark:text-white text-2xl font-black leading-tight tracking-tight">Student</h2>
                         </div>
                     </div>
-                    <div class="relative">
-                        <button id="notif-btn"
-                            onclick="toggleNotifPanel()"
-                            class="relative flex size-12 cursor-pointer items-center justify-center rounded-full bg-white dark:bg-[#1f1b3d] shadow-md border border-gray-100 dark:border-white/5">
-                            <span class="material-symbols-outlined text-[#100d1b] dark:text-white">notifications</span>
-                            <span id="notif-badge" class="absolute top-3 right-3 flex h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-white dark:border-[#1f1b3d]"></span>
-                        </button>
 
-                        <!-- Notification Panel -->
-                        <div id="notif-panel">
-                            <div class="notif-header">
-                                <div>
-                                    <p class="text-[#100d1b] dark:text-white text-sm font-bold">Notifications</p>
-                                    <p class="text-gray-400 text-[11px] font-medium mt-0.5">3 unread messages</p>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <button onclick="markAllRead()" class="text-[11px] font-bold text-primary hover:text-primary/70 transition-colors">Mark all read</button>
-                                    <button onclick="closeNotifPanel()" class="size-7 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
-                                        <span class="material-symbols-outlined text-gray-400 dark:text-gray-500" style="font-size:18px">close</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="notif-list">
-                                <div class="notif-item">
-                                    <div class="notif-icon bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400">
-                                        <span class="material-symbols-outlined" style="font-size:20px">login</span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-[#100d1b] dark:text-white text-[13px] font-semibold leading-snug">Campus Entry Confirmed</p>
-                                        <p class="text-gray-500 dark:text-gray-400 text-[11px] mt-0.5 leading-relaxed">Your QR scan at Main Gate was successful.</p>
-                                        <p class="text-primary dark:text-primary/70 text-[10px] font-bold mt-1">2 min ago</p>
-                                    </div>
-                                    <div class="notif-dot"></div>
-                                </div>
-                                <div class="notif-item">
-                                    <div class="notif-icon bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                                        <span class="material-symbols-outlined" style="font-size:20px">info</span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-[#100d1b] dark:text-white text-[13px] font-semibold leading-snug">Campus Notice</p>
-                                        <p class="text-gray-500 dark:text-gray-400 text-[11px] mt-0.5 leading-relaxed">Library hours extended until 10 PM this week.</p>
-                                        <p class="text-primary dark:text-primary/70 text-[10px] font-bold mt-1">1 hour ago</p>
-                                    </div>
-                                    <div class="notif-dot"></div>
-                                </div>
-                                <div class="notif-item">
-                                    <div class="notif-icon bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                                        <span class="material-symbols-outlined" style="font-size:20px">warning</span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-[#100d1b] dark:text-white text-[13px] font-semibold leading-snug">Access Attempt Blocked</p>
-                                        <p class="text-gray-500 dark:text-gray-400 text-[11px] mt-0.5 leading-relaxed">Unrecognised QR scan at Lab Block B. Please contact security.</p>
-                                        <p class="text-primary dark:text-primary/70 text-[10px] font-bold mt-1">Yesterday, 4:32 PM</p>
-                                    </div>
-                                    <div class="notif-dot"></div>
-                                </div>
-                                <div class="notif-item">
-                                    <div class="notif-icon bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400">
-                                        <span class="material-symbols-outlined" style="font-size:20px">logout</span>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-[#100d1b] dark:text-white text-[13px] font-semibold leading-snug">Campus Exit Recorded</p>
-                                        <p class="text-gray-500 dark:text-gray-400 text-[11px] mt-0.5 leading-relaxed">You exited via South Gate at 5:15 PM.</p>
-                                        <p class="text-gray-400 text-[10px] font-bold mt-1">Yesterday, 5:15 PM</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="notif-footer">
-                                <button class="text-[12px] font-bold text-primary hover:text-primary/70 transition-colors">View all notifications</button>
-                            </div>
-                        </div>
-                    </div>
                 </header>
                 <main class="flex-1 px-6 py-2">
                     <div class="mt-2 @container">
@@ -1491,62 +1339,6 @@
             refreshHistoryListener(ids);
         }
 
-        /* ── Real-time Notification Logic ── */
-        window._notifiedLogs = new Set();
-        
-        function updateUnreadCount() {
-            const headerSub = document.querySelector("#notif-panel .notif-header p:last-child");
-            const dots = document.querySelectorAll(".notif-dot");
-            if (headerSub) {
-                if (dots.length > 0) {
-                    headerSub.textContent = `${dots.length} unread message${dots.length > 1 ? 's' : ''}`;
-                } else {
-                    headerSub.textContent = "All caught up!";
-                }
-            }
-        }
-
-        function addRealtimeNotification(log) {
-            const notifList = document.querySelector('.notif-list');
-            const notifBadge = document.getElementById('notif-badge');
-            
-            if (!notifList) return;
-
-            const isEntry = log.type === "entry";
-            const icon = isEntry ? "login" : (log.type === "exit" || log.type === "outside" ? "logout" : "info");
-            const colorClass = isEntry ? "bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400" : (log.type === "denied" ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400" : "bg-gray-50 dark:bg-white/5 text-gray-500 dark:text-gray-400");
-            const title = isEntry ? "Campus Entry Confirmed" : (log.type === "denied" ? "Access Attempt Blocked" : "Campus Exit Recorded");
-            const desc = isEntry ? `Your QR scan at ${log.gate || 'Main Gate'} was successful.` : (log.type === "denied" ? `Unrecognized scan at ${log.gate || 'Main Gate'}.` : `You exited via ${log.gate || 'Main Gate'}.`);
-            
-            const timeStr = "Just now";
-
-            const notifItem = document.createElement("div");
-            notifItem.className = "notif-item animate-in slide-in-from-top-2 duration-300";
-            notifItem.onclick = () => {
-                const dot = notifItem.querySelector('.notif-dot');
-                if (dot) dot.remove();
-                updateUnreadCount();
-                navTo('history');
-                closeNotifPanel();
-            };
-            
-            notifItem.innerHTML = `
-                <div class="notif-icon ${colorClass}">
-                    <span class="material-symbols-outlined" style="font-size:20px">${icon}</span>
-                </div>
-                <div class="flex-1">
-                    <p class="text-[#100d1b] dark:text-white text-[13px] font-semibold leading-snug">${title}</p>
-                    <p class="text-gray-500 dark:text-gray-400 text-[11px] mt-0.5 leading-relaxed">${desc}</p>
-                    <p class="text-primary dark:text-primary/70 text-[10px] font-bold mt-1">${timeStr}</p>
-                </div>
-                <div class="notif-dot"></div>
-            `;
-
-            notifList.prepend(notifItem);
-
-            if (notifBadge) notifBadge.style.display = "flex";
-            updateUnreadCount();
-        }
 
         function refreshHistoryListener(idList = []) {
             const user = auth.currentUser;
@@ -1576,25 +1368,8 @@
                 where("uid", "in", searchIds)
             );
 
-            let isInitialLoad = true;
             unsubLogs = onSnapshot(logsQuery, snap => {
                 let logs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-                // Handle new incoming notifications
-                if (!isInitialLoad) {
-                    snap.docChanges().forEach(change => {
-                        if (change.type === "added") {
-                            const newLog = { id: change.doc.id, ...change.doc.data() };
-                            
-                            // Prevent duplicate notifications
-                            if (!window._notifiedLogs?.has(newLog.id)) {
-                                window._notifiedLogs.add(newLog.id);
-                                addRealtimeNotification(newLog);
-                            }
-                        }
-                    });
-                }
-                isInitialLoad = false;
                 
                 // Perform filtering and sorting (Mimics how the Admin table works automatically)
                 logs = logs.filter(log => {
@@ -1878,41 +1653,7 @@
             });
         }
 
-        /* ── Notification Panel ── */
-        window.toggleNotifPanel = function () {
-            const panel = document.getElementById("notif-panel");
-            const badge = document.getElementById("notif-badge");
-            const isOpen = panel.classList.contains("notif-open");
-            if (isOpen) {
-                panel.classList.remove("notif-open");
-            } else {
-                panel.classList.add("notif-open");
-                // Hide the red badge once opened
-                if (badge) badge.style.display = "none";
-            }
-        };
 
-        window.closeNotifPanel = function () {
-            const panel = document.getElementById("notif-panel");
-            panel.classList.remove("notif-open");
-        };
-
-        window.markAllRead = function () {
-            // Remove all unread dots
-            document.querySelectorAll(".notif-dot").forEach(dot => dot.remove());
-            // Update subheader
-            const sub = document.querySelector("#notif-panel .notif-header p:last-child");
-            if (sub) sub.textContent = "All caught up!";
-        };
-
-        // Close panel when clicking outside
-        document.addEventListener("click", (e) => {
-            const panel = document.getElementById("notif-panel");
-            const btn   = document.getElementById("notif-btn");
-            if (panel && btn && !panel.contains(e.target) && !btn.contains(e.target)) {
-                panel.classList.remove("notif-open");
-            }
-        });
     </script>
 
 </body>
