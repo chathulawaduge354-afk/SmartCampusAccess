@@ -285,7 +285,7 @@
         <div class="size-9 rounded-full bg-slate-200 flex items-center justify-center border-2 border-white shadow-sm">
           <span class="material-symbols-outlined text-sm text-slate-500">person</span>
         </div>
-        <a href="index.html"
+        <a href="#" onclick="handleAdminLogout(event)"
           class="flex items-center justify-center size-9 rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-colors border border-red-200 ml-1"
           title="Logout">
           <span class="material-symbols-outlined text-sm">logout</span>
@@ -2020,6 +2020,12 @@
           card.offsetHeight; // reflow
           card.style.animation = 'shake 0.4s ease';
         }
+      };
+
+      window.handleAdminLogout = function (e) {
+        if (e) e.preventDefault();
+        sessionStorage.removeItem(SESSION_KEY);
+        window.location.reload();
       };
 
       // Inject shake keyframe once
